@@ -37,7 +37,7 @@ class Shell {
     public function add($command, array $arguments = array())
     {
         $arguments = $this->parser->parse($arguments);
-        $isEnd     = $this->startsWithEnd($command);
+        $isEnd     = $this->hasPrefix('and', $command);
 
         if ($isEnd)
         {
@@ -64,14 +64,15 @@ class Shell {
     }
 
     /**
-     * Determine whether a command name starts with "and"
+     * Determine whether a string has the given prefix
      *
-     * @param  string  $command
+     * @param  string  $prefix
+     * @param  string  $string
      * @return boolean
      */
-    protected function startsWithAnd($command)
+    protected function hasPrefix($prefix, $string)
     {
-        return \strpos($command, 'and') === 0;
+        return 0 === \strpos($string, $prefix);
     }
 
     /**
