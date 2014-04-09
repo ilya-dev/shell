@@ -3,6 +3,32 @@
 class Shell {
 
     /**
+     * Elements of the chain
+     *
+     * @var array
+     */
+    protected $elements;
+
+    /**
+     * The ArgumentsParser instance
+     *
+     * @var \Shell\ArgumentsParser
+     */
+    protected $parser;
+
+    /**
+     * Constructor
+     *
+     * @return void
+     */
+    public function __construct(ArgumentsParser $parser)
+    {
+        $this->parser = $parser;
+
+        $this->elements = [];
+    }
+
+    /**
      * Add an element to the chain
      *
      * @param  string $command
