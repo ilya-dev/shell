@@ -54,6 +54,15 @@ class ShellSpec extends ObjectBehavior {
     {
         $this->add('andFoo')
              ->shouldBe(Shell::startChain('foo')->endChain());
+
+        $this->endChain()->shouldBe(Shell::foo()->endChain());
+    }
+
+    function it_can_be_treated_as_a_string()
+    {
+        $this->add('ls');
+
+        $this->endChain()->shouldBe((string) Shell::ls());
     }
 
 }
