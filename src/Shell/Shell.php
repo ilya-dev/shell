@@ -14,17 +14,27 @@ class Shell {
      *
      * @var \Shell\ArgumentsParser
      */
-    protected $parser;
+    protected $arguments;
+
+    /**
+     * The OptionsParser instance
+     *
+     * @var \Shell\OptionsParser
+     */
+    protected $options;
 
     /**
      * Constructor
      *
+     * @param \Shell\ArgumentsParser $arguments
+     * @param \Shell\OptionsParser   $options
      * @return void
      */
-    public function __construct(ArgumentsParser $parser)
+    public function __construct(ArgumentsParser $arguments, OptionsParser $options)
     {
-        $this->parser   = $parser;
-        $this->elements = [];
+        $this->arguments = $arguments;
+        $this->options   = $options;
+        $this->elements  = [];
     }
 
     /**
@@ -35,10 +45,9 @@ class Shell {
      */
     public function add()
     {
-        $command   = \func_get_args()[0];
-        $arguments = \array_slice(\func_get_args(), 1);
+        list($command, $arguments, $options) = $this->group(\func_get_args());
 
-        $arguments = $this->parser->parse($arguments);
+        $arguments = $this->arguments->parse($arguments);
         $isEnd     = $this->hasPrefix('and', $command);
 
         if ($isEnd)
@@ -52,6 +61,32 @@ class Shell {
         {
             return $this->endChain();
         }
+    }
+
+    /**
+     * Group given set of data to "command", "arguments" and "options"
+     *
+     * @param  array $data
+     * @return array
+     */
+    protected function group(array $data)
+    {
+        $command   = $data[0];
+        $arguments = $options = [];
+
+        foreach (\array_slice($data, 1) as $element)
+        {
+            if (\is_array($element))
+            {
+                $options = \array_merge($element, $options);
+            }
+            else
+            {
+                $arguments[] = $element;
+            }
+        }
+
+        return [$command, $arguments, $options];
     }
 
     /**

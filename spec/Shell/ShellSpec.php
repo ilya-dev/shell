@@ -3,13 +3,14 @@
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-use Shell\ArgumentsParser as Parser;
+use Shell\ArgumentsParser as Arguments;
+use Shell\OptionsParser as Options;
 
 class ShellSpec extends ObjectBehavior {
 
-    function let(Parser $parser)
+    function let(Arguments $arguments, Options $options)
     {
-        $this->beConstructedWith($parser);
+        $this->beConstructedWith($arguments, $options);
     }
 
     function it_is_initializable()
@@ -17,7 +18,7 @@ class ShellSpec extends ObjectBehavior {
         $this->shouldHaveType('Shell\Shell');
     }
 
-    function it_builds_a_command_string_properly(Parser $parser)
+    function it_builds_a_command_string_properly(Arguments $parser)
     {
         $parser->parse(Argument::any())->willReturn('wow');
 
@@ -27,16 +28,18 @@ class ShellSpec extends ObjectBehavior {
         $this->endChain()->shouldReturn('foo-bar wow | baz wow');
     }
 
-    function it_is_smart_enough_to_return_the_result_automatically(Parser $parser)
+    function it_is_smart_enough_to_return_the_result_automatically(Arguments $parser)
     {
         $parser->parse(Argument::any())->willReturn('bar');
 
         $this->add('andFoo')->shouldReturn('foo bar');
     }
 
-    function it_can_work_with_arguments(Parser $parser)
+    function it_can_work_with_arguments(Arguments $arguments, Options $options)
     {
-        $parser->parse(['d'])->willReturn('-d');
+        $arguments->parse(['d'])->willReturn('-d');
+
+        $options->parse(['bar', 'baz'])->willReturn("'bar' 'baz'");
 
         $this->add('foo', 'bar', 'baz', ['d']);
 
