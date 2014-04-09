@@ -3,11 +3,11 @@
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-use Shell\ArgumentsParser;
+use Shell\ArgumentsParser as Parser;
 
 class ShellSpec extends ObjectBehavior {
 
-    function let(ArgumentsParser $parser)
+    function let(Parser $parser)
     {
         $this->beConstructedWith($parser);
     }
@@ -17,7 +17,7 @@ class ShellSpec extends ObjectBehavior {
         $this->shouldHaveType('Shell\Shell');
     }
 
-    function it_builds_a_command_string_properly(ArgumentsParser $parser)
+    function it_builds_a_command_string_properly(Parser $parser)
     {
         $parser->parse(Argument::any())->willReturn('wow');
 
@@ -25,6 +25,13 @@ class ShellSpec extends ObjectBehavior {
         $this->add('baz');
 
         $this->endChain()->shouldReturn('foo-bar wow | baz wow');
+    }
+
+    function it_is_smart_enough_to_return_the_result_automatically(Parser $parser)
+    {
+        $parser->parse(Argument::any())->willReturn('bar');
+
+        $this->add('andFoo')->shouldReturn('foo bar');
     }
 
 }

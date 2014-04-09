@@ -23,8 +23,7 @@ class Shell {
      */
     public function __construct(ArgumentsParser $parser)
     {
-        $this->parser = $parser;
-
+        $this->parser   = $parser;
         $this->elements = [];
     }
 
@@ -38,8 +37,53 @@ class Shell {
     public function add($command, array $arguments = array())
     {
         $arguments = $this->parser->parse($arguments);
+        $isEnd     = $this->startsWithEnd($command);
+
+        if ($isEnd)
+        {
+            $command = $this->extractName($command);
+        }
 
         $this->elements[] = \sprintf('%s %s', $command, $arguments);
+
+        if ($isEnd)
+        {
+            return $this->endChain();
+        }
+    }
+
+    /**
+     * Extract the name of a command
+     *
+     * @param  string $command
+     * @return string
+     */
+    protected function extractName($command)
+    {
+        return \lcfirst(\str_replace('and', '', $command));
+    }
+
+    /**
+     * Determine whether a command name starts with "and"
+     *
+     * @param  string  $command
+     * @return boolean
+     */
+    protected function startsWithAnd($command)
+    {
+        return \strpos($command, 'and') === 0;
+    }
+
+    /**
+     * End the chain
+     *
+     * @return string
+     */
+    public function endChain()
+    {
+        $pipe = ' | ';
+
+        return \implode($pipe, $this->elements);
     }
 
     /**
@@ -59,18 +103,6 @@ class Shell {
     }
 
     /**
-     * End the chain
-     *
-     * @return string
-     */
-    public function endChain()
-    {
-        $pipe = ' | ';
-
-        return \implode($pipe, $this->elements);
-    }
-
-    /**
      * Handle dynamic calls to the instance
      *
      * @param  string $method
@@ -79,9 +111,9 @@ class Shell {
      */
     public function __call($method, array $arguments)
     {
-        $this->add($method, $arguments);
+        $result = $this->add($method, $arguments);
 
-        return $this;
+        return $result ?: $this;
     }
 
     /**
