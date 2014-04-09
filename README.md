@@ -1,13 +1,20 @@
 # Shell
 
-The syntax:
+[![Build Status](https://travis-ci.org/ilya-dev/shell.svg?branch=master)](https://travis-ci.org/ilya-dev/shell)
+
+> Some more details and documentation will be posted later
 
 ```php
 
-Shell::ls()->grep('some-conditional')->andSomeOtherCommand();
+use Shell\Shell;
 
-Shell::startChain('something-very-complex')->endChain();
+Shell::ls()->endChain(); // ls
 
-echo Shell::ls();
+(string) Shell::ls() // ls
+
+echo Shell::ls()->grep("some-pattern", ['f', 'switch', 'option' => 'value']);
+// ls | grep 'some-pattern' -f --switch --option='value'
+
+Shell::startChain('your-custom-command')->endChain(); // your-custom-command
 
 ```
