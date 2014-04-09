@@ -37,7 +37,9 @@ class Shell {
      */
     public function add($command, array $arguments = array())
     {
+        $arguments = $this->parser->parse($arguments);
 
+        $this->elements[] = \sprintf('%s %s', $command, $arguments);
     }
 
     /**
@@ -63,8 +65,9 @@ class Shell {
      */
     public function endChain()
     {
-        // for the purpose of testing
-        return 'foo-bar wow | baz wow';
+        $pipe = ' | ';
+
+        return \implode($pipe, $this->elements);
     }
 
     /**
