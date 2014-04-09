@@ -26,14 +26,16 @@ class Shell {
     /**
      * Constructor
      *
-     * @param \Shell\ArgumentsParser $arguments
-     * @param \Shell\OptionsParser   $options
+     * @param \Shell\ArgumentsParser|null $arguments
+     * @param \Shell\OptionsParser|null   $options
      * @return void
      */
-    public function __construct(ArgumentsParser $arguments, OptionsParser $options)
+    public function __construct(
+        ArgumentsParser $arguments = null, OptionsParser $options = null
+    )
     {
-        $this->arguments = $arguments;
-        $this->options   = $options;
+        $this->arguments = $arguments ?: new ArgumentsParser;
+        $this->options   = $options   ?: new OptionsParser;
         $this->elements  = [];
     }
 
