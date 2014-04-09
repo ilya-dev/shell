@@ -34,5 +34,14 @@ class ShellSpec extends ObjectBehavior {
         $this->add('andFoo')->shouldReturn('foo bar');
     }
 
+    function it_can_work_with_arguments(Parser $parser)
+    {
+        $parser->parse(['d'])->willReturn('-d');
+
+        $this->add('foo', 'bar', 'baz', ['d']);
+
+        $this->endChain()->shouldReturn("foo 'bar' 'baz' -d");
+    }
+
 }
 

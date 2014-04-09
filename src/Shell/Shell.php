@@ -30,12 +30,14 @@ class Shell {
     /**
      * Add an element to the chain
      *
-     * @param  string $command
-     * @param  array  $arguments
+     * @param  dynamic
      * @return self
      */
-    public function add($command, array $arguments = array())
+    public function add()
     {
+        $command   = \func_get_args()[0];
+        $arguments = \array_slice(\func_get_args(), 1);
+
         $arguments = $this->parser->parse($arguments);
         $isEnd     = $this->hasPrefix('and', $command);
 
@@ -98,7 +100,7 @@ class Shell {
     {
         $instance = new static;
 
-        $instance->add($command, $arguments);
+        \call_user_func_array([$instance, $command], $arguments);
 
         return $instance;
     }
@@ -112,7 +114,7 @@ class Shell {
      */
     public function __call($method, array $arguments)
     {
-        $result = $this->add($method, $arguments);
+        $result = \call_user_func_array([$this, $method], $arguments);
 
         return $result ?: $this;
     }
