@@ -18,28 +18,31 @@ class ShellSpec extends ObjectBehavior {
         $this->shouldHaveType('Shell\Shell');
     }
 
-    function it_builds_a_command_string_properly(Arguments $parser)
+    function it_builds_a_command_string_properly(Arguments $arguments, Options $options)
     {
-        $parser->parse(Argument::any())->willReturn('wow');
+        $arguments->parse(Argument::any())->willReturn('wow');
+        $options->parse(Argument::any())->willReturn('so');
 
         $this->add('foo-bar');
         $this->add('baz');
 
-        $this->endChain()->shouldReturn('foo-bar wow | baz wow');
+        $this->endChain()->shouldReturn('foo-bar wow so | baz wow so');
     }
 
-    function it_is_smart_enough_to_return_the_result_automatically(Arguments $parser)
+    function it_is_smart_enough_to_return_the_result_automatically(
+        Arguments $arguments, Options $options)
     {
-        $parser->parse(Argument::any())->willReturn('bar');
+        $arguments->parse(Argument::any())->willReturn('bar');
+        $options->parse(Argument::any())->willReturn('baz');
 
-        $this->add('andFoo')->shouldReturn('foo bar');
+        $this->add('andFoo')->shouldReturn('foo bar baz');
     }
 
     function it_can_work_with_arguments(Arguments $arguments, Options $options)
     {
-        $arguments->parse(['d'])->willReturn('-d');
+        $options->parse(['d'])->willReturn('-d');
 
-        $options->parse(['bar', 'baz'])->willReturn("'bar' 'baz'");
+        $arguments->parse(['bar', 'baz'])->willReturn("'bar' 'baz'");
 
         $this->add('foo', 'bar', 'baz', ['d']);
 

@@ -48,6 +48,7 @@ class Shell {
         list($command, $arguments, $options) = $this->group(\func_get_args());
 
         $arguments = $this->arguments->parse($arguments);
+        $options   = $this->options->parse($options);
         $isEnd     = $this->hasPrefix('and', $command);
 
         if ($isEnd)
@@ -55,7 +56,7 @@ class Shell {
             $command = $this->extractName($command);
         }
 
-        $this->elements[] = \sprintf('%s %s', $command, $arguments);
+        $this->elements[] = \sprintf('%s %s %s', $command, $arguments, $options);
 
         if ($isEnd)
         {
