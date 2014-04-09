@@ -14,28 +14,25 @@ class ArgumentsParser {
 
         foreach ($arguments as $key => $value)
         {
-            if (\is_string($key))
+            // if the argument has no value,
+            // we can just prepend a dash
+            // and be done
+            if (\is_int($key))
             {
-                if (\strlen($key) == 1)
-                {
-                    $piece = '-'.$key;
-                }
-                else
-                {
-                    $piece = '--'.$key;
-                }
+                $pieces[] = '-'.$value;
+
+                continue;
             }
 
-            if ( ! \is_int($key))
-            {
-                $piece .= '='.\escapeshellarg($value);
-            }
-            else
-            {
-                $piece = '-'.$value;
-            }
+            // otherwise,
+            // we need to determine whether it's a flag
+            // or a "true argument" and prefix the value correctly
+            $prefix = (\strlen($key) == 1) ? '-' : '--';
 
-            $pieces[] = $piece;
+            // always 'escape' values
+            $value = \escapeshellarg($value);
+
+            $pieces[] = \sprintf('%s%s=%s', $prefix, $key, $value);
         }
 
         return \implode(' ', $pieces);
