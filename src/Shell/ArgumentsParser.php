@@ -14,28 +14,30 @@ class ArgumentsParser {
 
         foreach ($arguments as $key => $value)
         {
-            // if the argument has no value,
-            // we can just prepend a dash
-            // and be done
             if (\is_int($key))
             {
-                $pieces[] = '-'.$value;
+                $pieces[] = \sprintf('%s%s', $this->prefix($value), $value);
 
                 continue;
             }
 
-            // otherwise,
-            // we need to determine whether it's a flag
-            // or a "true argument" and prefix the value correctly
-            $prefix = (\strlen($key) == 1) ? '-' : '--';
-
-            // always 'escape' values
             $value = \escapeshellarg($value);
 
-            $pieces[] = \sprintf('%s%s=%s', $prefix, $key, $value);
+            $pieces[] = \sprintf('%s%s=%s', $this->prefix($key), $key, $value);
         }
 
         return \implode(' ', $pieces);
+    }
+
+    /**
+     * Prefix a string properly
+     *
+     * @param  string $string
+     * @return string
+     */
+    protected function prefix($string)
+    {
+        return \strlen($string) == 1 ? '-' : '--';
     }
 
 }

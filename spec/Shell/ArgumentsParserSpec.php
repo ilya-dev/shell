@@ -35,9 +35,10 @@ class ArgumentsParserSpec extends ObjectBehavior {
         $arguments = [
             'b' => 'baz',
             'f',
+            'amaze',
         ];
 
-        $this->parse($arguments)->shouldReturn("-b='baz' -f");
+        $this->parse($arguments)->shouldReturn("-b='baz' -f --amaze");
     }
 
 }

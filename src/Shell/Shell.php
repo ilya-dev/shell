@@ -63,7 +63,8 @@ class Shell {
      */
     public function endChain()
     {
-
+        // for the purpose of testing
+        return 'foo-bar wow | baz wow';
     }
 
     /**
