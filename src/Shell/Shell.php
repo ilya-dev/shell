@@ -152,7 +152,9 @@ class Shell {
      */
     public function __call($method, array $arguments)
     {
-        $result = \call_user_func_array([$this, $method], $arguments);
+        \array_unshift($arguments, $method);
+
+        $result = \call_user_func_array([$this, 'add'], $arguments);
 
         return $result ?: $this;
     }

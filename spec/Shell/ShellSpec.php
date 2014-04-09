@@ -5,6 +5,7 @@ use Prophecy\Argument;
 
 use Shell\ArgumentsParser as Arguments;
 use Shell\OptionsParser as Options;
+use Shell\Shell;
 
 class ShellSpec extends ObjectBehavior {
 
@@ -47,6 +48,12 @@ class ShellSpec extends ObjectBehavior {
         $this->add('foo', 'bar', 'baz', ['d']);
 
         $this->endChain()->shouldReturn("foo 'bar' 'baz' -d");
+    }
+
+    function it_provides_you_some_syntactic_sugar()
+    {
+        $this->add('andFoo')
+             ->shouldBe(Shell::startChain('foo')->endChain());
     }
 
 }
