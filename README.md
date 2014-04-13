@@ -44,6 +44,12 @@ Done? Use `endChain` or just convert the object to a string:
 Shell::ls('my-epic-dir', ['w', 's' => 'foo', 'bar' => 'baz'])->endChain();
 ```
 
+Oh, and don't forget - you can chain the commands! Take a look:
+
+```php
+(string) Shell::ls('dir')->grep('some pattern'); // ls 'dir' | grep 'some pattern'
+```
+
 
 All right, you've successfully built your first command!
 
