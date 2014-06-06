@@ -3,40 +3,39 @@
 class Shell {
 
     /**
-     * Elements of the chain
+     * The elements of the chain.
      *
      * @var array
      */
-    protected $elements;
+    protected $elements = [];
 
     /**
-     * The ArgumentsParser instance
+     * The ArgumentBuilder instance.
      *
-     * @var \Shell\ArgumentsParser
+     * @var ArgumentBuilder
      */
     protected $arguments;
 
     /**
-     * The OptionsParser instance
+     * The OptionBuilder instance.
      *
-     * @var \Shell\OptionsParser
+     * @var OptionBuilder
      */
     protected $options;
 
     /**
-     * Constructor
+     * The constructor.
      *
-     * @param \Shell\ArgumentsParser|null $arguments
-     * @param \Shell\OptionsParser|null   $options
-     * @return void
+     * @param ArgumentBuilder|null $argument
+     * @param OptionBuilder|null $option
+     * @return Shell
      */
     public function __construct(
-        ArgumentsParser $arguments = null, OptionsParser $options = null
+        ArgumentBuilder $argument = null, OptionBuilder $option = null
     )
     {
-        $this->arguments = $arguments ?: new ArgumentsParser;
-        $this->options   = $options   ?: new OptionsParser;
-        $this->elements  = [];
+        $this->arguments = $argument ?: new ArgumentBuilder;
+        $this->options = $option ?: new OptionBuilder;
     }
 
     /**

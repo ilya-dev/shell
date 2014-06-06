@@ -1,17 +1,13 @@
 <?php namespace spec\Shell;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-
-use Shell\ArgumentsParser as Arguments;
-use Shell\OptionsParser as Options;
-use Shell\Shell;
+use Shell\Shell, Shell\ArgumentBuilder, Shell\OptionBuilder;
 
 class ShellSpec extends ObjectBehavior {
 
-    function let(Arguments $arguments, Options $options)
+    function let(ArgumentBuilder $argument, OptionBuilder $option)
     {
-        $this->beConstructedWith($arguments, $options);
+        $this->beConstructedWith($argument, $option);
     }
 
     function it_is_initializable()
