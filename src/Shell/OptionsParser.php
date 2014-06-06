@@ -3,42 +3,41 @@
 class OptionsParser {
 
     /**
-     * Transform an array of options to a string
+     * Transform an array of options to a string.
      *
-     * @param  array  $options
+     * @param array $options
      * @return string
      */
     public function parse(array $options)
     {
-        $pieces = [];
+        $chunks = [];
 
         foreach ($options as $key => $value)
         {
-            if (\is_int($key))
+            if (is_int($key))
             {
-                $pieces[] = \sprintf('%s%s', $this->prefix($value), $value);
+                $chunks[] = sprintf('%s%s', $this->prefix($value), $value);
 
                 continue;
             }
 
-            $value = \escapeshellarg($value);
-
-            $pieces[] = \sprintf('%s%s=%s', $this->prefix($key), $key, $value);
+            $chunks[] = sprintf(
+                '%s%s=%s', $this->prefix($key), $key, escapeshellarg($value)
+            );
         }
 
-        return \implode(' ', $pieces);
+        return implode(' ', $chunks);
     }
 
     /**
-     * Prefix a string properly
+     * Get an appropriate prefix for a given string.
      *
-     * @param  string $string
+     * @param string $string
      * @return string
      */
     protected function prefix($string)
     {
-        return \strlen($string) == 1 ? '-' : '--';
+        return strlen($string) == 1 ? '-' : '--';
     }
 
 }
-
