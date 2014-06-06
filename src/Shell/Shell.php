@@ -30,9 +30,7 @@ class Shell {
      * @param OptionBuilder|null $option
      * @return Shell
      */
-    public function __construct(
-        ArgumentBuilder $argument = null, OptionBuilder $option = null
-    )
+    public function __construct(ArgumentBuilder $argument = null, OptionBuilder $option = null)
     {
         $this->argument = $argument ?: new ArgumentBuilder;
         $this->option = $option ?: new OptionBuilder;

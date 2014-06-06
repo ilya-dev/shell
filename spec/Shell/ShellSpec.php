@@ -1,6 +1,6 @@
 <?php namespace spec\Shell;
 
-use PhpSpec\ObjectBehavior;
+use PhpSpec\ObjectBehavior, Prophecy\Argument;
 use Shell\Shell, Shell\ArgumentBuilder, Shell\OptionBuilder;
 
 class ShellSpec extends ObjectBehavior {
@@ -15,10 +15,10 @@ class ShellSpec extends ObjectBehavior {
         $this->shouldHaveType('Shell\Shell');
     }
 
-    function it_builds_a_command_string_properly(Arguments $arguments, Options $options)
+    function it_builds_a_command_string_properly(ArgumentBuilder $argument, OptionBuilder $option)
     {
-        $arguments->parse(Argument::any())->willReturn('wow');
-        $options->parse(Argument::any())->willReturn('so');
+        $argument->build(Argument::any())->willReturn('wow');
+        $option->build(Argument::any())->willReturn('so');
 
         $this->add('foo-bar');
         $this->add('baz');
@@ -26,20 +26,18 @@ class ShellSpec extends ObjectBehavior {
         $this->endChain()->shouldReturn('foo-bar wow so | baz wow so');
     }
 
-    function it_is_smart_enough_to_return_the_result_automatically(
-        Arguments $arguments, Options $options)
+    function it_returns_a_result_automatically(ArgumentBuilder $argument, OptionBuilder $option)
     {
-        $arguments->parse(Argument::any())->willReturn('bar');
-        $options->parse(Argument::any())->willReturn('baz');
+        $argument->build(Argument::any())->willReturn('bar');
+        $option->build(Argument::any())->willReturn('baz');
 
         $this->add('andFoo')->shouldReturn('foo bar baz');
     }
 
-    function it_can_work_with_arguments(Arguments $arguments, Options $options)
+    function it_works_with_arguments(ArgumentBuilder $argument, OptionBuilder $option)
     {
-        $options->parse(['d'])->willReturn('-d');
-
-        $arguments->parse(['bar', 'baz'])->willReturn("'bar' 'baz'");
+        $option->build(['d'])->willReturn('-d');
+        $argument->build(['bar', 'baz'])->willReturn("'bar' 'baz'");
 
         $this->add('foo', 'bar', 'baz', ['d']);
 
@@ -48,8 +46,7 @@ class ShellSpec extends ObjectBehavior {
 
     function it_provides_you_some_syntactic_sugar()
     {
-        $this->add('andFoo')
-             ->shouldBe(Shell::startChain('foo')->endChain());
+        $this->add('andFoo')->shouldBe(Shell::startChain('foo')->endChain());
 
         $this->endChain()->shouldBe(Shell::foo()->endChain());
     }
@@ -62,4 +59,3 @@ class ShellSpec extends ObjectBehavior {
     }
 
 }
-
