@@ -34,23 +34,23 @@ class Shell {
         ArgumentBuilder $argument = null, OptionBuilder $option = null
     )
     {
-        $this->arguments = $argument ?: new ArgumentBuilder;
-        $this->options = $option ?: new OptionBuilder;
+        $this->argument = $argument ?: new ArgumentBuilder;
+        $this->option = $option ?: new OptionBuilder;
     }
 
     /**
-     * Add an element to the chain
+     * Add an element to the chain.
      *
-     * @param  dynamic
+     * @param dynamic
      * @return self
      */
     public function add()
     {
-        list($command, $arguments, $options) = $this->group(\func_get_args());
+        list ($command, $arguments, $options) = $this->group(func_get_args());
 
-        $arguments = $this->arguments->parse($arguments);
-        $options   = $this->options->parse($options);
-        $isEnd     = $this->hasPrefix('and', $command);
+        $arguments = $this->argument->build($arguments);
+        $options = $this->option->build($options);
+        $isEnd = $this->hasPrefix('and', $command);
 
         if ($isEnd)
         {
