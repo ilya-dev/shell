@@ -1,7 +1,6 @@
 <?php namespace spec\Shell;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class ArgumentsParserSpec extends ObjectBehavior {
 
@@ -16,4 +15,3 @@ class ArgumentsParserSpec extends ObjectBehavior {
     }
 
 }
-
