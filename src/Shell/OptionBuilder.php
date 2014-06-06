@@ -1,14 +1,14 @@
 <?php namespace Shell;
 
-class OptionsParser {
+class OptionBuilder extends Builder {
 
     /**
-     * Transform an array of options to a string.
+     * Build a string from an array of options.
      *
      * @param array $options
      * @return string
      */
-    public function parse(array $options)
+    public function build(array $options)
     {
         $chunks = [];
 

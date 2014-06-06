@@ -1,14 +1,14 @@
 <?php namespace Shell;
 
-class ArgumentsParser {
+class ArgumentBuilder extends Builder {
 
     /**
-     * Transform an array of arguments to a string.
+     * Build a string from an array of arguments.
      *
      * @param array $arguments
      * @return string
      */
-    public function parse(array $arguments)
+    public function build(array $arguments)
     {
         return implode(' ', array_map('escapeshellarg', $arguments));
     }
