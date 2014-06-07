@@ -3,7 +3,7 @@
 class Shell {
 
     /**
-     * The elements of the chain.
+     * The elements of the current chain.
      *
      * @var array
      */
@@ -55,7 +55,7 @@ class Shell {
             $command = $this->extractName($command);
         }
 
-        $this->elements[] = \sprintf('%s %s %s', $command, $arguments, $options);
+        $this->elements[] = sprintf('%s %s %s', $command, $arguments, $options);
 
         if ($isEnd)
         {
@@ -64,104 +64,101 @@ class Shell {
     }
 
     /**
-     * Group given set of data to "command", "arguments" and "options"
+     * Group a given array by "command", "arguments" and "options".
      *
-     * @param  array $data
+     * @param array $data
      * @return array
      */
     protected function group(array $data)
     {
-        $command   = $data[0];
-        $arguments = $options = [];
+        $command = reset($data);
+        $arguments = [];
+        $options = [];
 
-        foreach (\array_slice($data, 1) as $element)
+        foreach (array_slice($data, 1) as $element)
         {
-            if (\is_array($element))
+            if (is_array($element))
             {
-                $options = \array_merge($element, $options);
+                $options = array_merge($element, $options);
+
+                continue;
             }
-            else
-            {
-                $arguments[] = $element;
-            }
+
+            $arguments[] = $element;
         }
 
         return [$command, $arguments, $options];
     }
 
     /**
-     * Extract the name of a command
+     * Extract name of a given command.
      *
-     * @param  string $command
+     * @param string $command
      * @return string
      */
     protected function extractName($command)
     {
-        return \lcfirst(\str_replace('and', '', $command));
+        return lcfirst(str_replace('and', '', $command));
     }
 
     /**
-     * Determine whether a string has the given prefix
+     * Determine whether a given string has a prefix.
      *
-     * @param  string  $prefix
-     * @param  string  $string
+     * @param string $prefix
+     * @param string $string
      * @return boolean
      */
     protected function hasPrefix($prefix, $string)
     {
-        return 0 === \strpos($string, $prefix);
+        return strpos($string, $prefix) === 0;
     }
 
     /**
-     * End the chain
+     * End the current chain.
      *
      * @return string
      */
     public function endChain()
     {
-        $pipe = ' | ';
-
-        return \implode($pipe, $this->elements);
+        return implode(' | ', $this->elements);
     }
 
     /**
-     * Start a new chain
+     * Start a new chain.
      *
-     * @param  string $command
-     * @param  array  $arguments
-     * @return \Shell\Shell
+     * @param string $command
+     * @param array $arguments
+     * @return Shell
      */
-    public static function startChain($command, array $arguments = array())
+    public static function startChain($command, array $arguments = [])
     {
         $instance = new static;
 
-        \call_user_func_array([$instance, $command], $arguments);
+        call_user_func_array([$instance, $command], $arguments);
 
         return $instance;
     }
 
     /**
-     * Handle dynamic calls to the instance
+     * Handle calls to non-existent methods.
      *
-     * @param  string $method
-     * @param  array  $arguments
-     * @return self
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
      */
     public function __call($method, array $arguments)
     {
-        \array_unshift($arguments, $method);
+        array_unshift($arguments, $method);
 
-        $result = \call_user_func_array([$this, 'add'], $arguments);
-
-        return $result ?: $this;
+        return call_user_func_array([$this, 'add'], $arguments) ?: $this;
     }
 
     /**
-     * Handle dynamic calls
+     * Handle static calls to non-existent methods.
      *
-     * @param  string $method
-     * @param  array  $arguments
-     * @return \Shell\Shell
+     * @param string $method
+     * @param array $arguments
+     * @return Shell
      */
     public static function __callStatic($method, array $arguments)
     {
@@ -169,7 +166,7 @@ class Shell {
     }
 
     /**
-     * Treat the object as a string
+     * Convert the object into a string.
      *
      * @return string
      */
@@ -179,4 +176,3 @@ class Shell {
     }
 
 }
-
